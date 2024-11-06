@@ -5,6 +5,7 @@ const userSchema = new Schema({
     userName: {type: String},
     fullName: {type: String},
     email: {type: String, email: true, required: true, unique: true},
+    role: {type: String, default: 'user', enum: ['user', 'peer-therapist', 'professional-therapist']},
     phone: {type: String},
     password: {type: String, required: true},
     profilePicture: {type: String},
