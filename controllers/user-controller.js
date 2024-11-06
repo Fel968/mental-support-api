@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { userModel } from "../models/user-models.js";
-import { registerUserValidator, loginUserValidator } from "../validators/user-validator.js";
+import { registerUserValidator, loginUserValidator, updateUserValidator } from "../validators/user-validator.js";
 
 export const registerUser = async (req, res, next) => {
     try {
@@ -68,3 +68,37 @@ export const loginUser = async (req, res, next) => {
         next(error);
     }
 }
+
+// Get User Profile
+export const getUserProfile = async (req, res, next) => {
+    try {
+        const user = await userModel
+            .findById(req.auth.id)
+            .select({ password: false });
+
+        res.json(user);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const userProfileUpdate = async (req, res, next) => {
+    try {
+        // validate user input
+        const { error, value } = updateUserValidator.validate({
+            ...req.body,
+            avatar: req.file?.filename
+        });
+        if (error) {
+            return res.status(422).json(error);
+        }
+
+        // Update user
+        await userModel.findByIdAndUpdate(req.auth.id, value);
+        // Respond to request
+        res.json('User profile updated');
+    } catch (error) {
+        next(error);
+    }
+}
+
