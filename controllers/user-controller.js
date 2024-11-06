@@ -87,7 +87,7 @@ export const userProfileUpdate = async (req, res, next) => {
         // validate user input
         const { error, value } = updateUserValidator.validate({
             ...req.body,
-            avatar: req.file?.filename
+            profilePicture: req.file?.filename
         });
         if (error) {
             return res.status(422).json(error);

@@ -20,5 +20,5 @@ export const updateUserValidator = Joi.object({
     phone: Joi.string(),
     password: Joi.string(),
     role: Joi.string().valid('user', 'peer-counsellor', 'counsellor'),
-    profilePicture: Joi.string(),
+    profilePicture: Joi.string()
 });
