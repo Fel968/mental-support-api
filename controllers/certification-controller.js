@@ -1,18 +1,27 @@
 import { certificateModel } from '../models/certificate.js';
+import { userModel } from '../models/user-models.js';
 import { postCertificateValidator } from '../validators/certificate-validator.js';
 
 export const postCertificate = async (req, res, next) => {
     try {
-        const { error, value } = postCertificateValidator.validate(req.body); //I'll have to do a spread to enable file upload. I have to do a multer for posting certificates.
-
+        // Validate request body
+        const { error, value } = postCertificateValidator.validate(req.body);
         if (error) {
             return res.status(422).json({ message: error.details[0].message });
         }
 
+        const userId = req.auth.id; 
+
+        // Verify if `req.auth` is correctly populated
+        if (!userId) {
+            return res.status(401).json({ message: "Unauthorized: User not authenticated" });
+        }
+
         const { certificate, yearsOfPractice, fieldOfExpertise } = value;
 
+        // Create new certificate
         const newCertificate = await certificateModel.create({
-            user: req.user._id,  
+            user: userId,  
             certificate,
             yearsOfPractice,
             fieldOfExpertise,
@@ -26,6 +35,7 @@ export const postCertificate = async (req, res, next) => {
         next(error);  
     }
 };
+
 
 // Get one for certificates
 

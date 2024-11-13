@@ -1,4 +1,5 @@
 import { responseModel } from "../models/user-response-model.js";
+import { userModel } from "../models/user-models.js";
 
 export const postResponse = async (req, res, next) => {
     try {
@@ -55,9 +56,10 @@ export const updateAssessmentStatus = async (req, res, next) => {
 
         // Approve the user as a peer therapist
         if (status === 'approved') {
-            user.role = 'peer therapist';
+            user.role = 'peer-therapist';
             user.isApproved = true;
         } else {
+            user.role = 'user';
             user.isApproved = false;
         }
 

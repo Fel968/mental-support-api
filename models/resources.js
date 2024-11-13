@@ -9,7 +9,7 @@ const resourceSchema = new mongoose.Schema({
     video: { type: String, duration: Number },
     document: { type: String },
     postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    source: { type: String, default: 'internal' },
+    source: { type: String, default: 'FelJoy' },
 }, { timestamps: true });
 
 const Resource = mongoose.model('Resource', resourceSchema);
