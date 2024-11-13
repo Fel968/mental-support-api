@@ -6,6 +6,7 @@ const userSchema = new Schema({
     fullName: {type: String},
     email: {type: String, email: true, required: true, unique: true},
     role: {type: String, default: 'user', enum: ['user', 'peer-therapist', 'professional-therapist', 'admin']},
+    isApproved: {type: Boolean, default: false},
     phone: {type: String},
     password: {type: String, required: true},
     profilePicture: {type: String},
