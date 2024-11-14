@@ -4,6 +4,6 @@ import { isAdmin, isAuthenticated } from "../middleware/auth.js";
 
 export const responseRouter = Router();
 
-responseRouter.post('/user/assessment/response', isAuthenticated, postResponse)
+responseRouter.post('/assessment/response', isAuthenticated, postResponse)
 
 responseRouter.get('/assessment/responses', isAuthenticated, isAdmin, getAllResponses); 

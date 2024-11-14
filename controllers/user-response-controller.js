@@ -1,30 +1,48 @@
 import { responseModel } from "../models/user-response-model.js";
 import { userModel } from "../models/user-models.js";
+import { responseValidator } from "../validators/response-validator.js";
+import { assessmentModel } from "../models/assessment-model.js";
+
 
 export const postResponse = async (req, res, next) => {
     try {
-        // I need a validator for this endpoint
-        const { questionId, response, category } = req.body;
-        const applicantId = req.auth.id; 
+        // Validate the request body
+        const { error, value } = responseValidator.validate(req.body);
 
+        if (error) {
+            return res.status(422).json({ error: error.details[0].message });
+        }
+
+        const { question, response, category } = value;
+        const applicantId = req.auth.id;
+
+        // Ensure `question` is an ObjectId reference
+        const existingQuestion = await assessmentModel.findOne({ _id: question });
+        
+        if (!existingQuestion) {
+            return res.status(404).json({ error: 'Question not found' });
+        }
+
+        // Create response in the database
         await responseModel.create({
-            question: questionId,
+            question: existingQuestion._id,
             applicant: applicantId,
             response,
-            category
+            category,
         });
 
         res.status(201).json('Response submitted');
     } catch (error) {
-        next();
+        next(error);
     }
 };
+
 
 
 // Get responses for admin
 export const getAllResponses = async (req, res, next) => {
     try {
-        const responses = await responseModel.find().populate('applicant', 'userName email').populate('question', 'question');
+        const responses = await responseModel.find().populate('applicant', 'userName email').populate({path: 'question', select: 'question'} );
         res.status(200).json(responses);
     } catch (error) {
         next();
