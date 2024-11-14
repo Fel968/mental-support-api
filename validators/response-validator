@@ -1,0 +1,9 @@
+import Joi from "joi";
+
+export const responseValidator = Joi.object({
+    question: Joi.object(),         // ObjectId as a string reference
+    applicant: Joi.object(),        // ObjectId as a string reference
+    response: Joi.string().required(),
+    category: Joi.string().optional(),
+    status: Joi.string().valid('approved', 'pending', 'rejected').default('pending')
+});

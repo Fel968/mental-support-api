@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-const resourceSchema = new mongoose.Schema({
-    title: { type: String, required: true },
+export const resourceSchema = new mongoose.Schema({
+    title: { type: String },
     description: { type: String },
     category: { type: String, enum: ['depression', 'anxiety', 'mindfulness'] },
-    resourceType: { type: String, enum: ['article', 'video', 'document'], required: true },
+    resourceType: { type: String, enum: ['article', 'video', 'document'] },
     article: { type: String },
     video: { type: String, duration: Number },
     document: { type: String },
@@ -12,6 +12,6 @@ const resourceSchema = new mongoose.Schema({
     source: { type: String, default: 'FelJoy' },
 }, { timestamps: true });
 
-const Resource = mongoose.model('Resource', resourceSchema);
+export const resourceModel = mongoose.model('Resource', resourceSchema);
 
 export default Resource;

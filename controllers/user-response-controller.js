@@ -74,3 +74,5 @@ export const updateAssessmentStatus = async (req, res, next) => {
         next(error);
     }
 };
+
+//Notification that says: Your status has been updated to {status}, kindly provide your age and a little info about yourself, so that users can reach out to you.

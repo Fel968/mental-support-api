@@ -17,6 +17,8 @@ export const loginUserValidator = Joi.object({
 export const updateUserValidator = Joi.object({
     userName: Joi.string(),
     fullName: Joi.string(),
+    age: Joi.number(),
+    aboutInfo: Joi.string(),
     phone: Joi.string(),
     password: Joi.string(),
     role: Joi.string().valid('user', 'peer-counsellor', 'counsellor'),

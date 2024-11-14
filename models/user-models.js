@@ -4,6 +4,8 @@ import { toJSON } from "@reis/mongoose-to-json";
 const userSchema = new Schema({
     userName: {type: String},
     fullName: {type: String},
+    age: {type: Number},
+    aboutInfo: {type: Number},
     email: {type: String, email: true, required: true, unique: true},
     role: {type: String, default: 'user', enum: ['user', 'peer-therapist', 'professional-therapist', 'admin']},
     isApproved: {type: Boolean, default: false},

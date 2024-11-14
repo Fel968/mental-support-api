@@ -1,0 +1,1 @@
+import { resourceModel } from "../models/resources";
