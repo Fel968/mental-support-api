@@ -4,7 +4,7 @@ import { userModel } from "../models/user-models.js";
 export const getSinglePeerTherapist = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const therapist = await userModel.findOne({ _id: id, role: 'peer-therapist' });
+        const therapist = await userModel.findOne({ _id: id, role: 'peer-therapist' }).select('-password');
 
         if (!therapist) {
             return res.status(404).json('Therapist not found');
@@ -24,7 +24,7 @@ export const getAllPeerTherapists = async (req, res, next) => {
         
         const therapists = await userModel
             .find({ ...parsedFilter, role: 'peer-therapist' })
-            .sort(parsedSort);
+            .sort(parsedSort).select('-password');
 
         res.status(200).json(therapists);
     } catch (error) {
@@ -36,7 +36,7 @@ export const getAllPeerTherapists = async (req, res, next) => {
 export const getSingleProTherapist = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const therapist = await userModel.findOne({ _id: id, role: 'professional-therapist' });
+        const therapist = await userModel.findOne({ _id: id, role: 'professional-therapist' }).select('-password');
 
         if (!therapist) {
             return res.status(404).json('Therapist not found');
@@ -56,7 +56,7 @@ export const getAllProTherapists = async (req, res, next) => {
         
         const therapists = await userModel
             .find({ ...parsedFilter, role: 'professional-therapist' })
-            .sort(parsedSort);
+            .sort(parsedSort).select('-password');
 
         res.status(200).json(therapists);
     } catch (error) {
