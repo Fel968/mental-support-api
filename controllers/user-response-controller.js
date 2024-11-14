@@ -24,7 +24,7 @@ export const postResponse = async (req, res, next) => {
 // Get responses for admin
 export const getAllResponses = async (req, res, next) => {
     try {
-        const responses = await responseModel.find().populate('applicant', 'name email').populate('question', 'question');
+        const responses = await responseModel.find().populate('applicant', 'userName email').populate('question', 'question');
         res.status(200).json(responses);
     } catch (error) {
         next();

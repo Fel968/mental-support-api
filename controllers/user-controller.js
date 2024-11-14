@@ -69,13 +69,24 @@ export const loginUser = async (req, res, next) => {
     }
 }
 
-// Get User Profile
+// get user's Profile
 export const getUserProfile = async (req, res, next) => {
     try {
         const user = await userModel
             .findById(req.auth.id)
             .select({ password: false });
 
+        res.json(user);
+    } catch (error) {
+        next(error);
+    }
+}
+
+// get all user profile
+export const getAllUserProfile = async (req, res, next) => {
+    try {
+        const user = await userModel.find();
+           
         res.json(user);
     } catch (error) {
         next(error);

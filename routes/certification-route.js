@@ -6,6 +6,6 @@ import { postCertificate, getAllCertificates, updateCertificateStatus } from "..
 export const certificateRouter = Router();
 
 certificateRouter.post('/therapist/certification', isAuthenticated, postCertificate)
-certificateRouter.get('/therapist/certification', isAdmin, getAllCertificates)
-certificateRouter.patch('/therapist/:id', isAdmin, updateCertificateStatus)
+certificateRouter.get('/therapist/certification', isAuthenticated, isAdmin, getAllCertificates)
+certificateRouter.patch('/therapist/:id',isAuthenticated, isAdmin, updateCertificateStatus)
 

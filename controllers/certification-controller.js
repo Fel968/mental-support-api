@@ -57,9 +57,10 @@ export const getAllCertificates = async (req, res, next) => {
 export const updateCertificateStatus = async (req, res, next) => {
     try {
         const { status } = req.body;  
-        const { certificateId } = req.params;  
+        // const { certificateId } = req.params;  
 
-        const certificate = await certificateModel.findByIdAndUpdate(certificateId, { status }, { new: true });
+        const certificate = await certificateModel.findOneAndUpdate( { _id: req.params.id },  { status },    { new: true });
+
         if (!certificate) {
             return res.status(404).json({ message: 'Certificate not found.' });
         }
@@ -70,7 +71,8 @@ export const updateCertificateStatus = async (req, res, next) => {
                 return res.status(404).json({ message: 'User not found.' });
             }
 
-            user.role = 'professional counselor';
+            user.role = 'professional-therapist';
+            user.isApproved = true;
             await user.save();  
         }
 
