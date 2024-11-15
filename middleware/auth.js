@@ -30,3 +30,23 @@ export const isAdmin = async (req, res, next) => {
     }
 };
 
+
+
+export const isTherapist = async (req, res, next) => {
+    try {
+        const user = await userModel.findById(req.auth.id);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        if (user.role === 'peer-therapist' || user.role === 'professional-therapist' || user.role === 'admin') {
+            next();
+        } else {
+            res.status(403).json({ error: 'Action not allowed! Only therapists can perform this action.'});
+        }
+
+    } catch (error) {
+        next(error);
+    }
+};
