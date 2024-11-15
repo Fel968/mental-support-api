@@ -16,3 +16,11 @@ export const resourceUpload = multer({
     }),
     preservePath: true
 });
+
+export const certificateUpload = multer({
+    storage: multerSaveFilesOrg({
+        apiAccessToken: process.env.SAVEFILESORG_API_KEY,
+        relativePath: '/FelJoy/certificates/*'
+    }),
+    preservePath: true
+});

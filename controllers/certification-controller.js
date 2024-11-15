@@ -22,7 +22,7 @@ export const postCertificate = async (req, res, next) => {
         // Create new certificate
         const newCertificate = await certificateModel.create({
             user: userId,  
-            certificate,
+            certificate: req.file?.filename,
             yearsOfPractice,
             fieldOfExpertise,
         });
