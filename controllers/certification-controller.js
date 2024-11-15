@@ -17,14 +17,14 @@ export const postCertificate = async (req, res, next) => {
             return res.status(401).json({ message: "Unauthorized: User not authenticated" });
         }
 
-        const { certificate, yearsOfPractice, fieldOfExpertise } = value;
+        const { certificates, yearsOfPractice, category } = value;
 
         // Create new certificate
         const newCertificate = await certificateModel.create({
             user: userId,  
-            certificate: req.file?.filename,
+            certificates,
             yearsOfPractice,
-            fieldOfExpertise,
+            category,
         });
 
         res.status(201).json({

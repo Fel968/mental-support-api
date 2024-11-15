@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const postCertificateValidator = Joi.object({
-    certificates: Joi.array().required(),
+    certificates: Joi.string().required(),
     yearsOfPractice: Joi.number(),
     category: Joi.string().valid('depression', 'anxiety', 'mindfulness', 'marriage', 'stress')
 });
