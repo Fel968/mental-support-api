@@ -10,7 +10,7 @@ export const postCertificate = async (req, res, next) => {
             return res.status(422).json({ message: error.details[0].message });
         }
 
-        const userId = req.auth.id; 
+        const userId = req.auth.id;
 
         // Verify if `req.auth` is correctly populated
         if (!userId) {
@@ -21,7 +21,7 @@ export const postCertificate = async (req, res, next) => {
 
         // Create new certificate
         const newCertificate = await certificateModel.create({
-            user: userId,  
+            user: userId,
             certificates,
             yearsOfPractice,
             category,
@@ -29,7 +29,7 @@ export const postCertificate = async (req, res, next) => {
 
         res.status(201).json("Certificate submitted for review");
     } catch (error) {
-        next(error);  
+        next(error);
     }
 };
 
@@ -46,39 +46,43 @@ export const getAllCertificates = async (req, res, next) => {
 
         res.status(200).json(certificates);
     } catch (error) {
-        next(error);  
+        next(error);
     }
 };
 
 
 export const updateCertificateStatus = async (req, res, next) => {
     try {
-        const { status } = req.body;  
+        const { status } = req.body;
         // const { certificateId } = req.params;  
 
-        const certificate = await certificateModel.findOneAndUpdate( { _id: req.params.id },  { status },    { new: true });
+        const certificate = await certificateModel.findOneAndUpdate({ _id: req.params.id }, { status }, { new: true });
 
         if (!certificate) {
             return res.status(404).json({ message: 'Certificate not found.' });
         }
 
+        const user = await userModel.findById(certificate.user);
+
         if (status === 'approved') {
-            const user = await userModel.findById(certificate.user);
             if (!user) {
                 return res.status(404).json({ message: 'User not found.' });
             }
 
             user.role = 'professional-therapist';
             user.isApproved = true;
-            await user.save();  
+            await user.save();
+        } else {
+            user.role = 'user';
+            user.isApproved = false;
         }
 
         res.status(200).json({
-            message: 'Certificate status updated successfully.',
-            data: certificate,
+            message: `User status updated to ${status}`, userRole: user.role,
+            isApproved: user.isApproved
         });
     } catch (error) {
-        next(error);  
+        next(error);
     }
 };
 
