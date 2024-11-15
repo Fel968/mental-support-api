@@ -27,10 +27,7 @@ export const postCertificate = async (req, res, next) => {
             category,
         });
 
-        res.status(201).json({
-            message: 'Certificate submitted successfully for review.',
-            data: newCertificate,
-        });
+        res.status(201).json("Certificate submitted for review");
     } catch (error) {
         next(error);  
     }
