@@ -7,6 +7,7 @@ import { certificateRouter } from "./routes/certification-route.js";
 import { approvedTherapistRouter } from "./routes/approved-therapists-routes.js";
 import { responseRouter } from "./routes/user-response-router.js";
 import { resourceRouter } from "./routes/resources-routes.js";
+import { moodRouter } from "./routes/mood-routes.js";
 
 await mongoose.connect(process.env.MONGO_URI);
 
@@ -21,6 +22,7 @@ app.use(responseRouter);
 app.use(certificateRouter);
 app.use(approvedTherapistRouter);
 app.use(resourceRouter)
+app.use(moodRouter);
 
 app.listen(3005, () => {
     console.log('App is listening on port 3005')
