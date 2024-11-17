@@ -10,3 +10,4 @@ moodRouter.get('/moodlogs/:clientId', isAuthenticated, isTherapist, getWeeklyMoo
 
 moodRouter.get('/moodlog/me', isAuthenticated, getUserWeeklyMoodLogs)
 
+
