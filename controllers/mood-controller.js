@@ -80,21 +80,27 @@ export const getWeeklyMoodLogs = async (req, res, next) => {
 
 export const getUserWeeklyMoodLogs = async (req, res, next) => {
     try {
-        
-        const userId = req.auth.id; 
+        const userId = req.auth.id; // Get the logged-in user's ID
 
+        // Check if the user exists in the database
         const userExists = await userModel.findById(userId);
         if (!userExists) {
             return res.status(404).json({ message: "User not found" });
         }
 
+        // Get the start and end dates for the current week
         const startDate = startOfWeek(new Date());
         const endDate = endOfWeek(new Date());
 
-        const userMoodLogs = await moodModel.find().select('emoji entry createdAt');
+        // Fetch mood logs for the logged-in user within the current week
+        const userMoodLogs = await moodModel.find({
+            postedBy: userId, // Filter by the logged-in user's ID
+            createdAt: { $gte: startDate, $lte: endDate }
+        }).select('emoji entry createdAt');
 
+        // If no mood logs found, send an empty array
         if (userMoodLogs.length === 0) {
-            return res.status(200).json({ message: 'No mood logs found for this week' });
+            return res.status(200).json({ message: 'No mood logs found for this week', userMoodLogs: [] });
         }
 
         res.status(200).json({ userMoodLogs });
@@ -102,5 +108,3 @@ export const getUserWeeklyMoodLogs = async (req, res, next) => {
         next(error);
     }
 };
-
-
