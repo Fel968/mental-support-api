@@ -76,8 +76,6 @@ export const getWeeklyMoodLogs = async (req, res, next) => {
 
 
 
-
-
 export const getUserWeeklyMoodLogs = async (req, res, next) => {
     try {
         const userId = req.auth.id; // Get the logged-in user's ID
