@@ -24,10 +24,10 @@ export const postMood = async (req, res, next) => {
             sharedWithId: sharedWithId || null,
         });
 
-        // If shared, add the mood log to the chat
-        if (sharedWithId && chatId) {
-            await chatModel.findByIdAndUpdate(chatId);
-        }
+        // // If shared, add the mood log to the chat
+        // if (sharedWithId && chatId) {
+        //     await chatModel.findByIdAndUpdate(chatId);
+        // }
 
         res.status(201).json({ message: 'Mood Posted' });
     } catch (error) {
@@ -56,7 +56,7 @@ export const getWeeklyMoodLogs = async (req, res, next) => {
             postedBy: clientId, // Client's mood logs
             sharedWithId: therapistId, // Only those shared with the therapist
             createdAt: { $gte: startDate, $lte: endDate }
-        }).select('emoji createdAt');
+        }).select('emoji createdAt').populate('postedBy', 'userName');
 
         // If no mood logs found, send an empty array
         if (weeklyMoodLogs.length === 0) {
