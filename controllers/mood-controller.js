@@ -15,15 +15,6 @@ export const postMood = async (req, res, next) => {
                 return res.status(404).json({ message: "Therapist not found" });
             }
         }
-
-        // Check if chatId exists
-        if (chatId) {
-            const chatExists = await chatModel.findById(chatId);
-            if (!chatExists) {
-                return res.status(404).json({ message: "Chat not found" });
-            }
-        }
-
         
         // Create mood log
         const mood = await moodModel.create({
@@ -31,7 +22,6 @@ export const postMood = async (req, res, next) => {
             entry,
             postedBy,
             sharedWithId: sharedWithId || null,
-            chatId: chatId || null
         });
 
         // If shared, add the mood log to the chat
@@ -48,24 +38,29 @@ export const postMood = async (req, res, next) => {
 
 export const getWeeklyMoodLogs = async (req, res, next) => {
     try {
+        const therapistId = req.auth.id; // Logged-in therapist ID
         const { clientId } = req.params;
 
-         // Check if clientId exists
-         const clientExists = await userModel.findById(clientId);
-         if (!clientExists) {
-             return res.status(404).json({ message: "Client not found" });
-         }
+        // Check if the client exists
+        const clientExists = await userModel.findById(clientId);
+        if (!clientExists) {
+            return res.status(404).json({ message: "Client not found" });
+        }
 
         // Get the start and end dates for the current week
         const startDate = startOfWeek(new Date());
         const endDate = endOfWeek(new Date());
 
-        // Fetch mood logs for the given client within the current week
-        const weeklyMoodLogs = await moodModel.find({ postedBy: clientId, createdAt: { $gte: startDate, $lte: endDate }}).select('emoji');
+        // Fetch mood logs shared with the therapist for the given client
+        const weeklyMoodLogs = await moodModel.find({
+            postedBy: clientId, // Client's mood logs
+            sharedWithId: therapistId, // Only those shared with the therapist
+            createdAt: { $gte: startDate, $lte: endDate }
+        }).select('emoji createdAt');
 
         // If no mood logs found, send an empty array
         if (weeklyMoodLogs.length === 0) {
-            return res.status(200).json({ message: 'No mood logs found for this week' });
+            return res.status(200).json({ message: 'No mood logs found for this user' });
         }
 
         res.status(200).json({ weeklyMoodLogs });
@@ -98,7 +93,7 @@ export const getUserWeeklyMoodLogs = async (req, res, next) => {
 
         // If no mood logs found, send an empty array
         if (userMoodLogs.length === 0) {
-            return res.status(200).json({ message: 'No mood logs found for this week', userMoodLogs: [] });
+            return res.status(200).json({ message: 'No mood logs found for this user'});
         }
 
         res.status(200).json({ userMoodLogs });
