@@ -4,7 +4,6 @@ import { postCertificateValidator } from '../validators/certificate-validator.js
 
 export const postCertificate = async (req, res, next) => {
     try {
-        // Validate request body
         const { error, value } = postCertificateValidator.validate(req.body);
         if (error) {
             return res.status(422).json({ message: error.details[0].message });
@@ -19,8 +18,7 @@ export const postCertificate = async (req, res, next) => {
 
         const { certificates, yearsOfPractice, category } = value;
 
-        // Create new certificate
-        const newCertificate = await certificateModel.create({
+        await certificateModel.create({
             user: userId,
             certificates,
             yearsOfPractice,
@@ -34,7 +32,7 @@ export const postCertificate = async (req, res, next) => {
 };
 
 
-// Get one for certificates
+// Get one for certificates??
 
 export const getAllCertificates = async (req, res, next) => {
     try {
