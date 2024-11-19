@@ -79,3 +79,42 @@ export const createMessageInChat = async (req, res, next) => {
         next(error);
     }
 };
+
+
+export const getAllUserChats = async (req, res, next) => {
+    try {
+        const userId = req.auth.id; // The logged-in user's ID
+
+        // Fetch all chat sessions where the user is a participant
+        const chats = await chatModel.find({
+            participants: userId,
+        })
+        .populate('participants', 'userName') // Populate participant details (e.g., name, email)
+        .sort({ updatedAt: -1 }); // Sort by the most recently updated chats
+
+        if (!chats.length) {
+            return res.status(404).json({ message: "No chat sessions found" });
+        }
+
+        // Organize chats by each unique participant (excluding the current user)
+        const organizedChats = chats.map((chat) => {
+            const otherParticipant = chat.participants.find(
+                (participant) => participant._id.toString() !== userId
+            );
+
+            return {
+                chatId: chat._id,
+                withUser: otherParticipant, // Details of the other user in the chat
+                lastMessage: chat.messages[chat.messages.length - 1], // The most recent message
+                messageCount: chat.messages.length, // Total number of messages in the chat
+                messages: chat.messages, // Full message history
+            };
+        });
+
+        // Send the response with all organized chats
+        res.status(200).json(organizedChats);
+    } catch (error) {
+        next(error);
+    }
+};
+
