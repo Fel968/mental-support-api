@@ -5,9 +5,9 @@ import { createMessageInChat, getAllUserChats, getChat } from "../controllers/ch
 
 export const chatRouter = Router();
 
-chatRouter.get('/chat/:recipientId', isAuthenticated, getChat); 
+chatRouter.get('/chat/:senderId', isAuthenticated, getChat); 
 
-chatRouter.post('/chat/:therapistId', isAuthenticated, createMessageInChat); 
+chatRouter.post('/chat/:recipientId', isAuthenticated, createMessageInChat); 
 
 chatRouter.get('/chat-sessions', isAuthenticated, getAllUserChats); // Create or get chat
 
