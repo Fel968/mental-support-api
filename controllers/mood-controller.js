@@ -101,3 +101,27 @@ export const getUserWeeklyMoodLogs = async (req, res, next) => {
         next(error);
     }
 };
+
+
+// Get all moods shared with therapist
+export const getAllSharedMoods = async (req, res, next) => {
+    try {
+        const therapistId = req.auth.id; // Logged-in therapist's ID
+
+        // Fetch all moods shared with the therapist
+        const sharedMoods = await moodModel.find({
+            sharedWithId: therapistId // Filter by sharedWithId
+        })
+            .select('emoji entry postedBy createdAt') // Select relevant fields
+            .populate('postedBy', 'userName'); // Populate the user information (e.g., userName)
+
+        // If no moods are shared with the therapist
+        if (sharedMoods.length === 0) {
+            return res.status(200).json({ message: 'No moods shared with you yet.' });
+        }
+
+        res.status(200).json({ sharedMoods });
+    } catch (error) {
+        next(error);
+    }
+};

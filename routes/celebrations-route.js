@@ -1,3 +1,4 @@
+import { Router } from "express";
 import { getAchievements, likeAchievement, postAchievement } from "../controllers/celebrations-controller.js";
 import { isAuthenticated } from "../middleware/auth.js";
 

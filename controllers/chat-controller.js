@@ -27,7 +27,7 @@ export const getChat = async (req, res, next) => {
 
         // If no chat is found, return a message indicating so
         if (!chat) {
-            return res.status(404).json({ message: "No messages found from this user" });
+            return res.status(404).json({ message: "No chats with this user" });
         }
 
         // Return the existing chat
