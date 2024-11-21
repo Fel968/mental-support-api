@@ -20,7 +20,7 @@ export const getAchievements = async (req, res, next) => {
     try {
         // Retrieve all achievements with user details populated
         const achievements = await celebrationModel.find()
-            .populate("postedBy", "userName") 
+            .populate("postedBy", "userName").populate('likedBy', 'userName profilePicture')
             .sort({ createdAt: -1 }); 
 
         res.status(200).json(achievements);
